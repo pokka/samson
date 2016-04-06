@@ -41,4 +41,16 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       bind_dn: Rails.application.config.samson.ldap.bind_dn,
       password: Rails.application.config.samson.ldap.password
   end
+
+  if Rails.application.config.samson.auth.gitlab
+    require 'omniauth-gitlab'
+    provider :gitlab,
+      ENV['GITLAB_APP_ID'],
+      ENV['GITLAB_SECRET'],
+      client_options: {
+        site: ENV['GITLAB_SITE'],
+        authorize_url: ENV['GITLAB_AUTHORIZE_URL'] || '/oauth/authorize',
+        token_url: ENV['GITLAB_TOKEN_URL'] || '/oauth/token'
+      }
+  end
 end

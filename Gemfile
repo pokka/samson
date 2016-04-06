@@ -9,13 +9,6 @@ gem 'dotenv-rails', '~> 0.9'
 gem 'dogstatsd-ruby', '~> 1.5.0', require: 'statsd'
 gem 'goldiloader'
 
-group :mysql2 do
-  gem 'mysql2', '~> 0.3'
-end
-
-group :postgres do
-  gem 'pg', '~> 0.13'
-end
 
 group :sqlite do
   gem "sqlite3"
@@ -75,6 +68,7 @@ end
 
 group :no_preload do
   gem 'omniauth', '~> 1.1'
+  gem 'omniauth-gitlab'
   gem 'omniauth-oauth2', '~> 1.1'
   gem 'omniauth-github', '= 1.1.1'
   gem 'omniauth-google-oauth2', '~> 0.2.4'

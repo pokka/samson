@@ -10,6 +10,12 @@ class SessionsController < ApplicationController
     end
   end
 
+  def gitlab
+    gitlab_authorization = GitlabAuthorization.new(auth_hash.extra.raw_info, auth_hash.extra.raw_info['private_token'])
+    return show_login_restriction unless gitlab_authorization.actived?
+    login_user(role_id: gitlab_authorization.role_id)
+  end
+
   def github
     return show_login_restriction unless role_id = github_authorization.role_id
     login_user(role_id: role_id)
