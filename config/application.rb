@@ -56,6 +56,10 @@ module Samson
     config.samson.github.status_url = ENV["GITHUB_STATUS_URL"].presence || 'status.github.com'
     config.samson.references_cache_ttl = ENV['REFERENCES_CACHE_TTL'].presence || 10.minutes
 
+    # Gitlab
+    config.samson.gitlab = ActiveSupport::OrderedOptions.new
+    config.samson.gitlab.site = ENV['GITLAB_SITE']
+
     # Configuration for LDAP
     config.samson.ldap = ActiveSupport::OrderedOptions.new
     config.samson.ldap.title = ENV["LDAP_TITLE"].presence

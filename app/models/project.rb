@@ -90,13 +90,18 @@ class Project < ActiveRecord::Base
     # but only hyphens in user/organisation names (as well as alphanumeric).
     repository_url.scan(/[:\/]([A-Za-z0-9-]+\/[\w.-]+?)(?:\.git)?$/).join
   end
+  alias_method :repo_path, :github_repo
 
   def repository_directory
     @repository_directory ||= Digest::MD5.hexdigest([repository_url, id].join)
   end
 
   def repository_homepage
-    "//#{Rails.application.config.samson.github.web_url}/#{github_repo}"
+    if Rails.application.config.samson.auth.gitlab
+      "#{Rails.application.config.samson.gitlab.site}/#{repo_path}"
+    else
+      "//#{Rails.application.config.samson.github.web_url}/#{repo_path}"
+    end
   end
 
   def webhook_stages_for(branch, service_type, service_name)
