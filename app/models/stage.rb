@@ -23,6 +23,7 @@ class Stage < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: { scope: [:project, :deleted_at] }
   validate :validate_bypass_used_correctly
+  validates :role_id, inclusion: { in: ProjectRole.all.map(&:id) }
 
   accepts_nested_attributes_for :new_relic_applications, allow_destroy: true, reject_if: :no_newrelic_name?
 
@@ -184,6 +185,11 @@ class Stage < ActiveRecord::Base
     datadog_monitor_ids.to_s.split(/, ?/).map { |id| DatadogMonitor.new(id) }
   end
 
+  def can_deploy_by?(user)
+    user_project_role = project.user_project_roles.where(user: user).first
+    !!user_project_role && user_project_role.role_id >= role_id
+  end
+
   private
 
   def build_new_project_command
@@ -226,4 +232,5 @@ class Stage < ActiveRecord::Base
       errors.add(:no_code_deployed, 'makes no sense when set but not being in production')
     end
   end
+
 end

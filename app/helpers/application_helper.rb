@@ -24,9 +24,17 @@ module ApplicationHelper
     elsif stage.locked_for?(current_user)
       content_tag :a, "Locked", class: "btn btn-primary disabled", disabled: true
     else
-      path = new_project_stage_deploy_path(project, stage)
-      link_to "Deploy", path, role: "button", class: "btn btn-primary"
+      if can_deploy?(stage, current_user)
+        path = new_project_stage_deploy_path(project, stage)
+        link_to "Deploy", path, role: "button", class: "btn btn-primary"
+      else
+        content_tag :span, "Deploy", class: "btn btn-primary", disabled: true
+      end
     end
+  end
+
+  def can_deploy?(stage, user)
+    stage.can_deploy_by?(user)
   end
 
   def controller_action

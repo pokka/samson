@@ -1,7 +1,7 @@
 module StagePermittedParams
   def stage_permitted_params
     @stage_permitted_params ||=
-      ([ :name, :command, :confirm, :permalink, :dashboard,
+      ([ :name, :command, :confirm, :permalink, :dashboard, :role_id,
         :production,
         :notify_email_address,
         :deploy_on_release,

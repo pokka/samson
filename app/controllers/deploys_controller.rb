@@ -5,6 +5,7 @@ class DeploysController < ApplicationController
 
   skip_before_action :require_project, only: [:active, :active_count, :recent, :changeset]
 
+  before_action :authorize_stage_deployer!, only: [:new, :create, :confirm, :buddy_check, :destroy]
   before_action :authorize_project_deployer!, only: [:new, :create, :confirm, :buddy_check, :destroy]
   before_action :find_deploy, except: [:index, :recent, :active, :active_count, :new, :create, :confirm]
   before_action :stage, only: :new
@@ -138,5 +139,9 @@ class DeploysController < ApplicationController
 
   def active_deploy_scope
     current_project ? current_project.deploys.active : Deploy.active
+  end
+
+  def authorize_stage_deployer!
+    unauthorized! unless stage.can_deploy_by?(current_user)
   end
 end
